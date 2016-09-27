@@ -78,14 +78,15 @@ ApplicationWindow {
             Layout.fillWidth: true
             Layout.fillHeight: true
 
-            TextArea {
-                id: whatDoYouThink
-                text: qsTr("")
+            Flickable {
+                id: flickable1
                 anchors.fill: parent
-                Layout.maximumHeight: 150
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                TextArea.flickable: Flickable { }
+
+                TextArea.flickable: TextArea {
+                    wrapMode: TextArea.Wrap
+                }
+
+                ScrollBar.vertical: ScrollBar { }
             }
         }
 
@@ -109,16 +110,24 @@ ApplicationWindow {
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             }
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    console.log("SAVING...")
+                }
+                onPressed: {
+                    button1.color = "#f4f4f4"
+                }
+                onReleased: {
+                    button1.color = "#d2d2d2"
+                }
+            }
         }
-
-
     }
 
     SoundEffect {
         id: theSound
         source: "media/sound.wav"
     }
-
-
 
 }
