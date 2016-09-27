@@ -6,6 +6,7 @@ import QtMultimedia 5.5
 import net.adapar.uc.paei.qml 1.0
 
 ApplicationWindow {
+    id: theApp
     visible: true
     width: 640
     height: 480
@@ -85,6 +86,7 @@ ApplicationWindow {
                 anchors.fill: parent
 
                 TextArea.flickable: TextArea {
+                    id: whatDoYouThink
                     wrapMode: TextArea.Wrap
                 }
 
@@ -115,7 +117,16 @@ ApplicationWindow {
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
-                    console.log("SAVING...")
+                    var expectation = Qt.createQmlObject("import net.adapar.uc.paei.qml 1.0; Expectation { }", theApp, "expectationSave")
+                    if (expectation === null) {
+                        console.error("Something happened!")
+                    } else {
+                        console.log("SAVING...")
+                        expectation.description = whatDoYouThink.text
+                        expectation.save()
+                        expectation.destroy()
+                        whatDoYouThink.text = ""
+                    }
                 }
                 onPressed: {
                     button1.color = "#f4f4f4"
