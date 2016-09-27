@@ -70,13 +70,23 @@ ApplicationWindow {
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
         }
 
-        TextArea {
-            id: whatDoYouThink
+        Rectangle {
             height: 150
-            text: qsTr("")
+            color: "#f0f0f0"
+            border.width: 2
             Layout.maximumHeight: 150
             Layout.fillWidth: true
             Layout.fillHeight: true
+
+            TextArea {
+                id: whatDoYouThink
+                text: qsTr("")
+                anchors.fill: parent
+                Layout.maximumHeight: 150
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                TextArea.flickable: Flickable { }
+            }
         }
 
         Rectangle {
