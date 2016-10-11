@@ -1,6 +1,9 @@
 #include "expectation.h"
 
-Expectation::Expectation(QObject *parent) : Abstract(parent)
+Expectation::Expectation(QObject *parent) :
+    Abstract(parent)
+  , m_whites(0)
+  , m_blacks(0)
 {
 
 }

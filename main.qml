@@ -5,14 +5,61 @@ import QtMultimedia 5.5
 
 import net.adapar.uc.paei.qml 1.0
 
-ApplicationWindow {
+ApplicationWindow {    
     id: theApp
+
+    property bool playing: false
+    property Expectation expectation: null;
+
     visible: true
     width: 640
     height: 480
     color: "#bfbfbf"
     title: qsTr("Expectativa sobre nada")
     visibility: "FullScreen"
+
+    function reset() {
+        if (expectation != null) {
+            expectation.destroy()
+        }
+        expectation = Qt.createQmlObject("import net.adapar.uc.paei.qml 1.0; Expectation { }", theApp, "expectationReset")
+    }
+
+    function playSound() {
+        console.debug("PLAY")
+        toggleEnabled(false)
+        playing = true
+        theTimer.running = true
+    }
+
+    function stopSound() {
+        console.debug("STOP")
+        toggleEnabled(true)
+        playing = false
+    }
+
+    function toggleEnabled(value) {
+        buttonWhite.enabled = value
+        buttonBlack.enabled = value
+        buttonSave.enabled = value
+        whatDoYouThink.enabled = value
+    }
+
+    Component.onCompleted: {
+        reset();
+    }
+
+    Timer {
+        id: theTimer
+        interval: 2000
+        running: false
+        repeat: false
+        triggeredOnStart: false
+        onTriggered: {
+            console.debug("TIMEOUT")
+            stopSound()
+        }
+    }
 
     ColumnLayout {
         id: columnLayout1
@@ -26,7 +73,7 @@ ApplicationWindow {
             id: label2
             x: 253
             y: 353
-            text: qsTr("toca cada cuadro y escucha")
+            text: playing ? qsTr("escucha") : qsTr("haz click en cada cuadro y escucha")
             font.bold: true
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
         }
@@ -44,9 +91,10 @@ ApplicationWindow {
                 Layout.fillWidth: true
                 MouseArea {
                     anchors.fill: parent
+                    cursorShape: Qt.PointingHandCursor
                     onClicked: {
-                        theSound.stop()
-                        theSound.play()
+                        expectation.whiteIncrement()
+                        playSound()
                     }
                 }
             }
@@ -58,9 +106,10 @@ ApplicationWindow {
                 Layout.fillWidth: true
                 MouseArea {
                     anchors.fill: parent
+                    cursorShape: Qt.PointingHandCursor
                     onClicked: {
-                        theSound.stop()
-                        theSound.play()
+                        expectation.blackIncrement()
+                        playSound()
                     }
                 }
             }
@@ -95,7 +144,7 @@ ApplicationWindow {
         }
 
         Rectangle {
-            id: button1
+            id: buttonSave
             height: 40
             color: "#d2d2d2"
             radius: 10
@@ -117,30 +166,23 @@ ApplicationWindow {
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
-                    var expectation = Qt.createQmlObject("import net.adapar.uc.paei.qml 1.0; Expectation { }", theApp, "expectationSave")
-                    if (expectation === null) {
-                        console.error("Something happened!")
+                    console.log("SAVING...")
+                    if (expectation == null) {
+                        console.error("Expectation not found")
                     } else {
-                        console.log("SAVING...")
                         expectation.description = whatDoYouThink.text
                         expectation.save()
-                        expectation.destroy()
                         whatDoYouThink.text = ""
                     }
                 }
                 onPressed: {
-                    button1.color = "#f4f4f4"
+                    buttonSave.color = "#f4f4f4"
                 }
                 onReleased: {
-                    button1.color = "#d2d2d2"
+                    buttonSave.color = "#d2d2d2"
                 }
             }
         }
-    }
-
-    SoundEffect {
-        id: theSound
-        source: "media/sound.wav"
     }
 
 }
