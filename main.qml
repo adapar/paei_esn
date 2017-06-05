@@ -15,7 +15,7 @@ ApplicationWindow {
     width: 640
     height: 480
     color: "#bfbfbf"
-    title: qsTr("Expectativa sobre nada")
+    title: qsTr("")
     visibility: "FullScreen"
 
     function reset() {
@@ -73,7 +73,7 @@ ApplicationWindow {
             id: label2
             x: 253
             y: 353
-            text: playing ? qsTr("escucha") : qsTr("haz click en cada cuadro y escucha")
+            text: playing ? qsTr("escucha") : qsTr("haz click en cada cuadrado y escucha")
             font.bold: true
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
         }
@@ -117,7 +117,7 @@ ApplicationWindow {
 
         Label {
             id: label1
-            text: qsTr("describe los sonidos")
+            text: qsTr("describe qué escuchas cuando haces click en el cuadrado blanco y en el cuadrado negro")
             font.bold: true
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
         }
